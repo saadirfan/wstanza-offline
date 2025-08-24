@@ -7,8 +7,8 @@
 
 **wstanza** provides a minimal semantic structure for Webflow projects through just two concepts:
 
-* **Context** marks environmental sections
-* **Block** defines content units
+* **Context** Theme wrappers (Webflow `<section>`)
+* **Block** Content units (building blocks of your layout)
 
 Inside blocks, you have complete freedom. Webflow's generated classes, custom names, and CMS elements all remain valid.
 
@@ -71,12 +71,16 @@ With Variables in place, utility frameworks create redundancy rather than value.
 
 wstanza provides just two semantic anchors:
 
-1. **Context** → Environmental sections (Webflow Section)
-2. **Block** → Content units (Webflow Div Block)
+#### Context
+Contexts act as theme wrappers, mapping directly to Webflow `<section>` elements. They give your page vertical rhythm (rows) and can also carry theme or layout variations, like context-dark or context-flushed.
+
+#### Block
+Blocks are content units — the building blocks of your layout. In Webflow, they can be created with either Div Blocks or Containers (both render as <div> in code).
+Inside blocks, you have full flexibility: Webflow’s generated classes, CMS-driven structures, and one-off custom names all remain valid.
 
 Plus typography tokens:
-
-3. **Style** → Reusable text classes connected to Variables
+#### Style
+Typography tokens use the style- prefix. They connect directly to Webflow Variables for scalable, reusable text patterns.
 
 That's it. No mandatory wrappers. No rigid hierarchy. Just enough structure to be useful, not enough to be restrictive.
 
