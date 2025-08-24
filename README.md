@@ -1,36 +1,38 @@
 # wstanza
-
-*Semantic composition for Webflow projects*
+*Semantic scaffolding for Webflow projects*
 
 ---
 
-**wstanza** is a methodology for structuring Webflow projects.
-It introduces semantic anchors at critical levels—section, container, and block—while preserving creative freedom inside those blocks. It’s inspired by Blocktail methodology. 
+## Introduction
 
-The idea is similar to poetry: stanzas provide rhythm and structure, but the words within remain flexible.
-wstanza applies the same principle to Webflow: enough structure to scale, without interfering with Webflow’s native design workflow.
+**wstanza** provides a minimal semantic structure for Webflow projects through just two concepts:
 
-Unlike frameworks, wstanza doesn’t ship with a utility library or replace Webflow’s tools. Instead, it aligns with **Webflow Variables, the Designer panel, and CMS features**, providing a thin semantic layer where it matters most.
+* **Context** marks environmental sections
+* **Block** defines content units
+
+Inside blocks, you have complete freedom. Webflow's generated classes, custom names, and CMS elements all remain valid.
+
+Inspired by Blocktail methodology but radically simplified for Webflow's visual-first workflow, wstanza gives just enough structure to scale without disrupting the platform's native patterns.
 
 ---
 
 ## The Problem
 
-### When Frameworks Fill Gaps
+### When Frameworks Filled the Gap
 
-Before Webflow Variables went mainstream, frameworks emerged that layered their own utility libraries on top of Webflow. These systems attempted to provide reusable spacing, typography, and layout patterns.
+Before Webflow Variables became standard, frameworks emerged to provide what Webflow was missing: reusable spacing, typography, and layout patterns. They did this by layering utility libraries on top of Webflow's class system.
 
-The challenge is that this created a **dual system of style management**:
+While these frameworks accelerated prototyping, they introduced a **dual system of style management**:
 
-* One layer inside the framework’s utility classes.
-* Another layer inside Webflow’s own classes and style panel.
+* One layer in the framework's utility classes
+* Another layer in Webflow's own style panel
 
-Developers ended up defining and maintaining CSS in two places, often duplicating effort.
+The result was duplication and drift. Teams maintained styles in two places, never fully sure which system was "in charge."
 
 ### The Class Proliferation Problem
 
 ```html
-<!-- Example output from a framework-driven approach -->
+<!-- Framework-driven approach -->
 <div class="padding-top-large padding-bottom-medium max-width-medium 
             margin-left-auto margin-right-auto text-align-center 
             background-neutral-100 border-radius-small shadow-medium
@@ -43,136 +45,332 @@ Developers ended up defining and maintaining CSS in two places, often duplicatin
 </div>
 ```
 
-This pattern introduces several problems in Webflow projects:
+This pattern creates recurring issues:
 
-1. **Selector Complexity** — Components may require 15–20 classes for simple styling. HTML becomes configuration rather than markup.
-2. **Platform Bypass** — Styles are locked into class names instead of being managed through Webflow’s style panel.
-3. **Stylesheet Bloat** — Frameworks often ship hundreds of classes that go unused in a specific project. Since Webflow has no purge step, they remain indefinitely.
-4. **Maintenance Drift** — When conventions evolve, projects must reconcile old and new class patterns.
-5. **Overlapping Systems** — Teams manage both Webflow’s classes and the framework’s utilities, leading to confusion and redundancy.
+1. **Selector Complexity** – Components require 15–20 classes for basic styling
+2. **Platform Bypass** – Styling lives in class names instead of Webflow's style panel
+3. **Stylesheet Bloat** – Hundreds of unused utility classes persist indefinitely
+4. **Maintenance Drift** – Inconsistent patterns across framework versions
+5. **Overlapping Systems** – Managing both Webflow's classes and framework utilities
 
 ### The Architecture Mismatch
 
-Frameworks of this kind made sense when Webflow lacked **native Variables**. They offered token-like consistency at a time when Webflow didn’t.
+These frameworks made sense when Webflow lacked Variables. But Webflow has since closed that gap:
 
-Now, Webflow Variables provide:
+* **Variables** now provide tokenized values for spacing, colors, and typography
+* **Visual editing** manages tokens directly in the Designer
+* **Native responsiveness** handles breakpoints without utility classes
 
-* **Tokenized values** (sizes, colors, spacing, typography).
-* **Visual editing** for those tokens.
-* **Consistency** across breakpoints and themes.
-
-With Variables in place, layering an external framework on top often creates more friction than benefit. The need for a separate utility system has largely diminished.
+With Variables in place, utility frameworks create redundancy rather than value.
 
 ---
 
 ## Core Philosophy
 
-### Frontloaded Discipline
+### Radical Simplicity
 
-wstanza enforces structure **only at the top three levels**:
+wstanza provides just two semantic anchors:
 
-1. **Section (`sec-`)** → Defines page rows.
-2. **Container (`con-`)** → Establishes layout boundaries.
-3. **Block (`block-`)** → Marks semantic content units.
+1. **Context** → Environmental sections (Webflow Section)
+2. **Block** → Content units (Webflow Div Block)
 
-Inside blocks? No restrictions. Webflow’s generated classes, one-offs, or CMS-driven selectors all remain valid.
-The three anchors are sufficient to keep projects consistent and parseable without constraining design.
+Plus typography tokens:
 
-### Typography Tokens
+3. **Style** → Reusable text classes connected to Variables
 
-The one exception is typography.
-The `style-` prefix provides reusable tokens for text (headings, paragraphs, labels, inputs). These tie directly into Webflow Variables and help prevent uncontrolled style proliferation.
+That's it. No mandatory wrappers. No rigid hierarchy. Just enough structure to be useful, not enough to be restrictive.
 
 ---
 
 ## Core Concepts
 
-| Prefix   | Scope / Element           | Purpose                                  | Example (Valid)                           |
-| -------- | ------------------------- | ---------------------------------------- | ----------------------------------------- |
-| `sec-`   | Section (`<section>`)     | Defines page rows / major layout anchors | `<section class="sec-hero">…</section>`   |
-| `con-`   | Container (`<div>`)       | Layout wrapper inside a section          | `<div class="con-main">…</div>`           |
-| `block-` | Div Block (semantic unit) | Marks a content component                | `<div class="block-feature_card">…</div>` |
-| `style-` | Text elements only        | Reusable typography tokens (Variables)   | `<h2 class="style-heading_xl">Title</h2>` |
+### Context
+
+Contexts define environmental sections of your page. They map to Webflow's Section element and can handle their own layout constraints.
+
+```html
+<!-- Basic context -->
+<section class="context">
+  <!-- Content goes here -->
+</section>
+
+<!-- Semantic context -->
+<section class="context-hero">
+  <!-- Hero content -->
+</section>
+
+<!-- Context with modifiers -->
+<section class="context context-dark">
+  <!-- Dark themed section -->
+</section>
+```
+
+**Context modifiers** provide variations without complexity:
+- `context-flushed` – No padding
+- `context-small` – Reduced spacing
+- `context-dark` – Dark theme
+- `context-wide` – Full width
+
+### Block
+
+Blocks are semantic content units that live inside contexts. They map to Webflow's Div Block element.
+
+```html
+<!-- Basic block -->
+<div class="block">
+  <!-- Any content -->
+</div>
+
+<!-- Semantic block -->
+<div class="block-testimonial">
+  <!-- Testimonial content -->
+</div>
+
+<!-- Block with Webflow's generated classes -->
+<div class="block div-block-47">
+  <!-- Mixed approach is fine -->
+</div>
+```
+
+### Style (Typography)
+
+Typography uses the `style-` prefix for reusable text tokens connected to Webflow Variables.
+
+```html
+<h1 class="style-heading_xl">Hero Title</h1>
+<h2 class="style-heading_lg">Section Title</h2>
+<p class="style-text_lead">Lead paragraph</p>
+<p class="style-text_body">Body content</p>
+```
+
+Common tokens:
+- `style-heading_xl` – Hero headings
+- `style-heading_lg` – Section titles
+- `style-heading_md` – Subsections
+- `style-text_lead` – Lead paragraphs
+- `style-text_body` – Body content
+- `style-text_small` – Captions
+- `style-label` – Form labels
 
 ---
 
-## Valid Patterns
+## Pattern Examples
 
-✅ Correct usage of `sec-`, `con-`, and `block-`:
+### Basic Structure
 
 ```html
-<section class="sec-hero">
-  <div class="con-main">
-    <div class="block-hero_content">
-      <h1 class="style-heading_xl">Welcome</h1>
-      <p class="style-text_lead">Lead paragraph</p>
-    </div>
+<section class="context">
+  <div class="block">
+    <h2 class="style-heading_lg">Welcome</h2>
+    <p class="style-text_body">Content goes here</p>
   </div>
 </section>
 ```
 
-✅ Nested blocks are allowed:
+### Semantic Naming
 
 ```html
-<div class="block-testimonial_carousel">
-  <div class="block-testimonial_card">
-    <p class="style-quote">"Great product!"</p>
+<section class="context-hero context-dark">
+  <div class="block-hero_content">
+    <h1 class="style-heading_xl">Welcome to Our Platform</h1>
+    <p class="style-text_lead">Build better websites</p>
   </div>
-</div>
+</section>
 ```
 
----
+### Multiple Blocks
 
-## Invalid Patterns
+```html
+<section class="context-features">
+  <div class="block-feature_card">
+    <h3 class="style-heading_md">Fast</h3>
+    <p class="style-text_body">Speed matters</p>
+  </div>
+  
+  <div class="block-feature_card">
+    <h3 class="style-heading_md">Simple</h3>
+    <p class="style-text_body">Clarity wins</p>
+  </div>
+</section>
+```
 
-| Pattern                                                 | Issue                                    | Correct Form                                                                        |
-| ------------------------------------------------------- | ---------------------------------------- | ----------------------------------------------------------------------------------- |
-| `<section class="sec-hero"><div class="block-content">` | Missing `con-` between section and block | `<section class="sec-hero"><div class="con-main"><div class="block-content">`       |
-| `<div class="con-wrapper"><div class="content">`        | Container outside a section              | `<section class="sec-wrapper"><div class="con-wrapper"><div class="block-content">` |
-| `<div class="block-card"><div class="con-inner">`       | Container placed inside block            | Containers must be first child of section                                           |
-| `<div class="style-wrapper">`                           | Misuse of `style-` prefix                | `style-` is for text elements only (`<h1 class="style-heading_xl">`)                |
+### With Layout Constraints
+
+When you need max-width or centering, apply it directly to the context or specific blocks:
+
+```css
+/* Context handles its own constraints */
+.context {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+}
+
+/* Or specific blocks can be constrained */
+.block-narrow {
+  max-width: 800px;
+  margin: 0 auto;
+}
+```
 
 ---
 
 ## Quick Reference
 
 ```plaintext
-STRUCTURE (Required):
-sec-[name]    → Section
-  con-[name]  → Container (first child)
-    block-[name] → Semantic unit
-      [Any classes allowed inside]
+STRUCTURE:
+context         → Environmental section
+  block         → Content unit
+    [freedom]   → Any Webflow classes
 
-TYPOGRAPHY (Optional):
-style-[token] → Text elements only
+VARIATIONS:
+context-{name}  → Semantic context
+block-{name}    → Semantic block
+context-{mod}   → Context modifier
+
+TYPOGRAPHY:
+style-{token}   → Text elements only
 ```
-
 
 ---
 
-## Advanced Applications
+## Advanced: Behavioral Layer
 
-### Observer and Agent Integration
+### Observers and Agents
 
-Because wstanza introduces stable anchors (`sec-`, `con-`, `block-`), it also creates predictable points for behavior attachment.
+Once you have stable semantic anchors, they become reliable mount points for behavior:
+
+* **Observers (`data-observer`)** – Provide block-level sovereignty over lifecycle and states
+* **Agents (`data-agent`)** – Add reusable behaviors without claiming ownership
 
 ```html
-<section class="sec-products">
-  <div class="con-grid">
-    <div class="block-product_card" 
-         data-observer="ProductObserver"
-         data-agent="LazyLoad">
-      <!-- Block-level behavior -->
+<section class="context-products">
+  <div class="block-product_card"
+       data-observer="ProductObserver"
+       data-agent="LazyLoad">
+    <!-- Observer manages lifecycle -->
+    <!-- Agent adds lazy loading -->
+  </div>
+</section>
+```
+
+This behavioral layer remains optional but provides clear patterns for adding interactivity when needed.
+
+---
+
+## Migration Guide
+
+### From Utility Frameworks
+
+1. **Identify sections** → Add `context` class
+2. **Find content units** → Add `block` class
+3. **Replace text utilities** → Use `style-` tokens
+4. **Move styles to panel** → Let Webflow handle visual properties
+5. **Clean up** → Remove utility classes
+
+### From Scratch
+
+1. **Start simple** → Use generic `context` and `block`
+2. **Add meaning** → Use semantic names where helpful
+3. **Define typography** → Create Variables and `style-` tokens
+4. **Stay flexible** → Mix with Webflow's generated classes
+
+---
+
+## Why wstanza?
+
+### For Humans
+- **Just 2 concepts** to remember (plus typography)
+- **No mandatory nesting** or wrappers
+- **Works with** Webflow, not against it
+- **Progressive enhancement** – start simple, add specificity as needed
+
+### For AI
+- **Stable anchors** survive Webflow republishing
+- **Predictable structure** for automation
+- **Clear patterns** for prompt-driven development
+- **Semantic meaning** improves AI comprehension
+
+### For Scale
+- **Minimal overhead** – no framework bloat
+- **Variables-first** – leverages Webflow's native features
+- **Maintainable** – clear structure without rigidity
+- **Portable** – patterns work across projects
+
+---
+
+## Examples in Practice
+
+### Before: Framework Approach
+```html
+<div class="padding-large max-width-medium center-align 
+            bg-gray radius-medium shadow mobile-hide">
+  <h2 class="text-xxl bold primary-color">Welcome</h2>
+</div>
+```
+
+### After: wstanza
+```html
+<section class="context">
+  <div class="block">
+    <h2 class="style-heading_lg">Welcome</h2>
+  </div>
+</section>
+```
+
+The styling moves to Webflow's style panel where it belongs, using Variables for consistency.
+
+---
+
+## Common Patterns
+
+### Hero Section
+```html
+<section class="context-hero context-dark">
+  <div class="block-hero_content">
+    <h1 class="style-heading_xl">Welcome</h1>
+    <p class="style-text_lead">Subtitle text</p>
+    <a class="button">Get Started</a>
+  </div>
+</section>
+```
+
+### Feature Grid
+```html
+<section class="context-features">
+  <div class="block-feature_grid">
+    <div class="block-feature_card">
+      <h3 class="style-heading_md">Feature 1</h3>
+    </div>
+    <div class="block-feature_card">
+      <h3 class="style-heading_md">Feature 2</h3>
     </div>
   </div>
 </section>
 ```
 
-* **Data Observers** provide block-level awareness: lifecycle, events, state.
-* **Data Agents** apply behaviors across multiple blocks or contexts.
+### CMS Integration
+```html
+<section class="context-blog">
+  <div class="block">
+    <!-- Webflow Collection List -->
+    <div class="w-dyn-list">
+      <!-- CMS content -->
+    </div>
+  </div>
+</section>
+```
 
-This approach ensures that automation, animation, and AI-driven workflows can reliably target semantic units without ambiguity.
+---
 
-For a deeper dive into how Observers and Agents work, see [Blocktail Behavioral Patterns](https://blocktail.dev/fundamentals/behavioral-patterns).
+## Summary
 
+wstanza simplifies Webflow development to its essence:
 
+1. **Context** → Environmental sections
+2. **Block** → Content units  
+3. **Style** → Typography tokens
+
+No mandatory wrappers. No utility explosion. Just semantic anchors that make projects maintainable and AI-friendly.
+
+The result: cleaner HTML, better Webflow integration, and sustainable development practices that scale.
